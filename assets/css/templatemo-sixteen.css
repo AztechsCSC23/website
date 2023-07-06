@@ -1,10 +1,4 @@
-/*
 
-TemplateMo 546 Sixteen Clothing
-
-https://templatemo.com/tm-546-sixteen-clothing
-
-*/
 body {
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
@@ -13,6 +7,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   
 }
+
+/* .container{
+	width: 375px;
+	height: 520px;
+	
+} */
 p {
 	margin-bottom: 0px;
 	font-size: 14px;
@@ -218,6 +218,23 @@ header {
 }
 header .navbar {
 	padding: 17px 0px;
+	align-items: center;
+	justify-content: space-between;
+	display: flex;
+}
+
+.search-bar {
+	background-color: rgb(249, 252, 224);
+	border-radius: 2rem;
+	padding: 0.6rem, 1rem ;
+}
+
+.search-bar input [type="search"] {
+	background: transparent;
+	width: 30vw;
+	margin-left: 1rem;
+	font-size: 0.9rem;
+	color: hsl(253, 30%, 50%);
 }
 .background-header .navbar {
 	padding: 17px 0px;
