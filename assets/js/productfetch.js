@@ -1,22 +1,31 @@
-fetch("https://boiling-fjord-00108-52329a44ed31.herokuapp.com/all")
-  .then((data) => {
-    return data.json(); // Convert the response to an object
-  })
-  .then((responseData) => {
-    const objectData = responseData.collection1; // Access the desired collection
+function searchProducts() {
+  var searchQuery = document.getElementById("searchInput").value;
 
-    let tableData = "";
-    objectData.forEach((values) => {
-      tableData += `<tr>
-        <td>${values._id}</td>
-        <td>${values["Item Name"]}</td> <!-- Access "Item Name" using square brackets notation -->
-        <td>${values.Price}</td>
-        <td><img src="${values.Image}"/></td>
-      </tr>`;
+  // Make an HTTP GET request to the search API endpoint
+  fetch(`https://boiling-fjord-00108-52329a44ed31.herokuapp.com/search?query=${encodeURIComponent(searchQuery)}`)
+    .then((response) => {
+      if (response.ok) {
+        return response.json(); // Convert the response to an object
+      } else {
+        throw new Error("Error: " + response.status);
+      }
+    })
+    .then((responseData) => {
+      const objectData = responseData.collection1; // Access the desired collection
+
+      let tableData = "";
+      objectData.forEach((values) => {
+        tableData += `<tr>
+          <td>${values._id}</td>
+          <td>${values["Item Name"]}</td> <!-- Access "Item Name" using square brackets notation -->
+          <td>${values.Price}</td>
+          <td><img src="${values.Image}" alt="${values["Item Name"]}"/></td>
+        </tr>`;
+      });
+
+      document.getElementById("table_body").innerHTML = tableData;
+    })
+    .catch((error) => {
+      console.log(error);
     });
-
-    document.getElementById("table_body").innerHTML = tableData;
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+}
