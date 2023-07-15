@@ -16,7 +16,7 @@ function searchProducts() {
       let tableData = "";
       objectData.forEach((values) => {
         tableData += `<tr>
-          <td>${values._id}</td>
+          <td><a href="item.html?id=${values._id}">${values._id}</a></td>
           <td>${values["Item Name"]}</td> <!-- Access "Item Name" using square brackets notation -->
           <td>${values.Price}</td>
           <td><img src="${values.Image}" alt="${values["Item Name"]}"/></td>
