@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+    <title>Compare Items</title>
+
+     <!-- Bootstrap core CSS -->
+     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+     <!-- Additional CSS Files -->
+     <link rel="stylesheet" href="assets/css/fontawesome.css">
+     <link rel="stylesheet" href="assets/css/templatemo-sixteen.css">
+     <link rel="stylesheet" href="assets/css/owl.css">
+
+    <style>
+        img {
+            width: 100px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+ <!-- Header -->
+ <header class="">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html"><h2>UniCart</h2></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home </a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">Products</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="compare.html">Compare
+                <span class="sr-only">(current)</span>
+              </a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+    <div class="page-heading products-heading header-text">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-content">
+                        <h2>Compare Items</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table within page -->
+    <div class="container">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody id="compare_table"></tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+
+
+ <!--COLLECTION 1-->
+    <script>
+        function getItemDetails(itemId) {
+            // Make an HTTP GET request to fetch the item details
+            fetch(`https://boiling-fjord-00108-52329a44ed31.herokuapp.com/item/collection1/${itemId}`)
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json(); // Convert the response to an object
+                    } else {
+                        throw new Error("Error: " + response.status);
+                    }
+                })
+                .then((itemData) => {
+                    // Populate the item details table
+                    const compareTable = document.getElementById("compare_table");
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${itemData["Item Name"]}</td>
+                        <td>${itemData.Price}</td>
+                        <td>${itemData.Description}</td>
+                        <td><img src="${itemData.Image}" alt="${itemData["Item Name"]}"/></td>
+                        <td><button onclick="removeItemFromCompare('${itemId}')">Remove</button></td>
+                    `;
+                    compareTable.appendChild(row);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        function loadComparisonItems() {
+            const compareItems = JSON.parse(localStorage.getItem("compareItems")) || [];
+            compareItems.forEach((itemId) => {
+                getItemDetails(itemId);
+            });
+        }
+
+        function removeItemFromCompare(itemId) {
+            // Retrieve comparedItems from localStorage or initialize it as an empty array
+            let comparedItems = JSON.parse(localStorage.getItem("compareItems")) || [];
+
+            // Remove the item from the comparedItems array
+            comparedItems = comparedItems.filter((item) => item !== itemId);
+
+            // Update the comparison table
+            updateComparisonTable(comparedItems);
+
+            // Update the localStorage with the updated comparedItems
+            localStorage.setItem("compareItems", JSON.stringify(comparedItems));
+
+            // Display a notification
+            alert("Item removed from comparison");
+        }
+
+        function updateComparisonTable(comparedItems) {
+            // Get the compare_table element
+            const compareTable = document.getElementById("compare_table");
+
+            // Clear the existing table content
+            compareTable.innerHTML = "";
+
+            // Loop through the comparedItems array and populate the table
+            comparedItems.forEach((itemId) => {
+                getItemDetails(itemId);
+            });
+        }
+
+        loadComparisonItems();
+    </script>
+
+
+<!--COLLECTION 2-->
+    <script>
+          function getItemDetails(itemId) {
+            // Make an HTTP GET request to fetch the item details
+            fetch(`https://boiling-fjord-00108-52329a44ed31.herokuapp.com/item/collection2/${itemId}`)
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json(); // Convert the response to an object
+                    } else {
+                        throw new Error("Error: " + response.status);
+                    }
+                })
+                .then((itemData) => {
+                    // Populate the item details table
+                    const compareTable = document.getElementById("compare_table");
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${itemData.name}</td>
+                        <td>${itemData.price}</td>
+                        <td>${itemData.key_features}</td>
+                        <td><img src="${itemData.images}" alt="${itemData.name}"/></td>
+                        <td><button onclick="removeItemFromCompare('${itemId}')">Remove</button></td>
+                    `;
+                    compareTable.appendChild(row);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        function loadComparisonItems() {
+            const compareItems = JSON.parse(localStorage.getItem("compareItems")) || [];
+            compareItems.forEach((itemId) => {
+                getItemDetails(itemId);
+            });
+        }
+
+        function removeItemFromCompare(itemId) {
+            // Retrieve comparedItems from localStorage or initialize it as an empty array
+            let comparedItems = JSON.parse(localStorage.getItem("compareItems")) || [];
+
+            // Remove the item from the comparedItems array
+            comparedItems = comparedItems.filter((item) => item !== itemId);
+
+            // Update the comparison table
+            updateComparisonTable(comparedItems);
+
+            // Update the localStorage with the updated comparedItems
+            localStorage.setItem("compareItems", JSON.stringify(comparedItems));
+
+            // Display a notification
+            alert("Item removed from comparison");
+        }
+
+        function updateComparisonTable(comparedItems) {
+            // Get the compare_table element
+            const compareTable = document.getElementById("compare_table");
+
+            // Clear the existing table content
+            compareTable.innerHTML = "";
+
+            // Loop through the comparedItems array and populate the table
+            comparedItems.forEach((itemId) => {
+                getItemDetails(itemId);
+            });
+        }
+
+        loadComparisonItems();
+    </script>
+
+</body>
+
+</html>
